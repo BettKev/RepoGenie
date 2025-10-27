@@ -1,20 +1,43 @@
+import { useState } from "react";
+import "./App.css";
+
 function App() {
+  const [repoUrl, setRepoUrl] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!repoUrl.trim()) {
+      alert("Please enter a valid GitHub repository URL.");
+      return;
+    }
+    console.log("Repository submitted:", repoUrl);
+    // TODO: Send repoUrl to backend for analysis
+  };
 
   return (
-    <>
-      <h1>
-        Welcome to CodeBase Genius
-      </h1>
-      <p>
-        Codebase Genius is an agentic platform running on JAC programming language.
-      </p>
-      <p>
-        Using a collection of agents the platform can orchestarate a repository mapping to analyze the code contained within a public Github repository. You simply provide a link for the public github repository and the agents get to work to generate a comprehensive documentation of the codebase.
-      </p>
-      <label htmlFor="repoUrl">Repository Url</label>
-      <input type="text" name="repoUrl" id="repoUrl" />
-    </>
-  )
+    <div className="app-container">
+      <header>
+        <h1>🧠 CodeBase Genius</h1>
+        <p>
+          Codebase Genius is an agentic platform built on the JAC programming language.
+          It uses a collection of intelligent agents to analyze public GitHub repositories
+          and generate comprehensive documentation of the codebase.
+        </p>
+      </header>
+
+      <form onSubmit={handleSubmit} className="repo-form">
+        <label htmlFor="repoUrl">Repository URL</label>
+        <input
+          type="text"
+          id="repoUrl"
+          placeholder="https://github.com/username/repository"
+          value={repoUrl}
+          onChange={(e) => setRepoUrl(e.target.value)}
+        />
+        <button type="submit">Analyze Repository</button>
+      </form>
+    </div>
+  );
 }
 
-export default App
+export default App;
