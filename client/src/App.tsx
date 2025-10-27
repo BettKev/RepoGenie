@@ -1,61 +1,87 @@
 import { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
 
 function App() {
   const [repoUrl, setRepoUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!repoUrl.trim()) {
-      alert("Please enter a valid GitHub repository URL.");
+      toast("Please enter a valid GitHub repository URL.");
       return;
     }
-    console.log("Repository submitted:", repoUrl);
-    // TODO: Send repoUrl to backend for analysis
+
+    setIsLoading(true);
+
+    // Simulate backend call
+    setTimeout(() => {
+      console.log("Repository submitted:", repoUrl);
+      setIsLoading(false);
+      toast("Repository analysis started!");
+    }, 2000);
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-slate-100 px-4">
-      <header className="max-w-2xl text-center space-y-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-cyan-400">
-          🧠 CodeBase Genius
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-black text-gray-100 px-4">
+      <header className="text-center max-w-2xl mb-10">
+        <h1 className="text-4xl font-extrabold mb-4 text-indigo-400">
+          CodeBase Genius
         </h1>
-        <p className="text-slate-300 leading-relaxed text-base md:text-lg">
+        <p className="text-lg leading-relaxed text-gray-300">
           Codebase Genius is an agentic platform built on the{" "}
-          <span className="text-cyan-400 font-medium">JAC programming language</span>.
-          It uses a collection of intelligent agents to analyze public GitHub repositories
+          <span className="font-semibold text-indigo-300">
+            JAC programming language
+          </span>
+          . It uses intelligent agents to analyze public GitHub repositories
           and generate comprehensive documentation of the codebase.
         </p>
       </header>
 
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md mt-8 flex flex-col gap-4 bg-slate-800/60 p-6 rounded-2xl shadow-lg"
+        className="bg-gray-800 shadow-xl rounded-2xl p-6 w-full max-w-md flex flex-col space-y-4 border border-gray-700"
       >
         <label
           htmlFor="repoUrl"
-          className="text-slate-300 font-medium text-left"
+          className="text-gray-200 font-medium text-sm uppercase tracking-wide"
         >
           Repository URL
         </label>
+
         <input
           type="text"
           id="repoUrl"
           placeholder="https://github.com/username/repository"
           value={repoUrl}
           onChange={(e) => setRepoUrl(e.target.value)}
-          className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          className="bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder-gray-500"
         />
+
         <button
           type="submit"
-          className="w-full py-2.5 bg-cyan-400 text-slate-900 font-semibold rounded-lg shadow-md hover:bg-cyan-300 transition-all"
+          disabled={isLoading}
+          className={`${
+            isLoading
+              ? "bg-indigo-500 cursor-not-allowed"
+              : "bg-indigo-600 hover:bg-indigo-700"
+          } text-white font-semibold py-2 rounded-lg transition duration-200`}
         >
-          Analyze Repository
+          {isLoading ? (
+            <div className="flex items-center justify-center space-x-2">
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <span>Analyzing...</span>
+            </div>
+          ) : (
+            "Analyze Repository"
+          )}
         </button>
       </form>
 
-      <footer className="mt-10 text-sm text-slate-500">
-        © 2025 CodebaseGenius — Empowering developers through intelligent code understanding.
+      <footer className="mt-10 text-gray-500 text-sm">
+        © {new Date().getFullYear()} CodeBase Genius. All rights reserved.
       </footer>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
