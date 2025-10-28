@@ -1,3 +1,4 @@
+#server/main.jac
 import from byllm.llm { Model }
 import from dotenv { load_dotenv }
 import os;
@@ -7,12 +8,14 @@ include docgenie;
 include codeanalyzer;
 
 # Initialize LLM model
-glob llm = Model(
-    model_name = "gemini-2.0-flash",
-    provider = "google",
-    api_key = os.getenv(GEMINI_API_KEY),
-    verbose = False
-);
+# glob llm = Model(
+#     model_name = "gemini-2.0-flash",
+#     provider = "google",
+#     api_key = (os.getenv("GOOGLE_API_KEY")),
+#     verbose = False
+# );
+
+glob llm = Model(model_name="gemini/gemini-2.0-flash");
 
 node Repo{
     has repo_url:str = ""; #The GitHub link input by the user.
