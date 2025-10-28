@@ -1,11 +1,10 @@
 #server/supervisor.jac
-import from main {Repo}
 #This is the main agent that supervises other agents and manages overall tasks. It responsible for high-level decision making and coordination.
 #It uses environment variables for configuration, including API keys for external services.
-
-
 # Supervisor Agent — handles high-level orchestration.
 # Step 1: Validate and store the input repository URL.
+
+import from main {Repo}
 
 walker validate_repo_url {
     has repo_url: str;
