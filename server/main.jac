@@ -2,8 +2,6 @@ import from byllm.llm { Model }
 import from dotenv { load_dotenv }
 import os;
 
-
-
 # Initialize LLM model
 glob llm = Model(
     model_name = "gemini-2.0-flash",
