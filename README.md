@@ -7,3 +7,8 @@ Code Analyzer
 Dec Genie
 Repo Mapper
 Supervisor
+
+## Environmental Variable
+Inside .env include the following:
+
+GEMINI_API_KEY = ""
