@@ -2,10 +2,7 @@
 import from byllm.llm { Model }
 import from dotenv { load_dotenv }
 import os;
-include supervisor;
-include repomapper;
-include docgenie;
-include codeanalyzer;
+
 
 # Initialize LLM model
 # glob llm = Model(
@@ -50,6 +47,12 @@ node Documentation{
     has summary_points:str = ""; #optional bullet list of key sections.
     has status:str = ""; #generation status (“in_progress”, “complete”, “failed”).
 }
+
+# Include agents after nodes are defined to avoid circular dependencies
+include supervisor;
+include repomapper;
+include docgenie;
+include codeanalyzer;
 
 # Example walker endpoint to check server status
 walker ping_server {

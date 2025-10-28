@@ -1,4 +1,5 @@
 #server/supervisor.jac
+import from main {Repo}
 #This is the main agent that supervises other agents and manages overall tasks. It responsible for high-level decision making and coordination.
 #It uses environment variables for configuration, including API keys for external services.
 
@@ -7,44 +8,44 @@
 # Step 1: Validate and store the input repository URL.
 
 walker validate_repo_url {
+    has repo_url: str;
+
     obj __specs__ {
-        static has methods:list = ["post"];
-        static has auth:bool = False;
-        static has path:str = "/validate_repo_url";
+        static has auth: bool = False;
+        static has methods: list = ["post"];
+        static has path: str = "/validate_repo_url";
     }
 
-    can post_validate with `root entry{
-        # ---Validate the URL format ---
-        if not (repo_url.startswith("https://github.com/") or repo_url.startswith("git@github.com:")) {
+    # Receive the url from frontend
+    can receive_url with `root entry {
+        if self.repo_url != "" {
             report {
-                "status": "error",
-                "message": "Invalid GitHub URL. Must start with https://github.com/ or git@github.com:"
+                "status": "good",
+                "message": "Repo URL received successfully.",
+                "repo_url": self.repo_url
             };
-            stop;
+        } else {
+            report {
+                "status": "failed",
+                "message": "Missing or empty 'repo_url'."
+            };
         }
+    }
 
-        # ---Extract repository name ---
-        repo_name = repo_url.split("/")[-1];
-        if repo_name.endswith(".git") {
-            repo_name = repo_name[:-4];
-        }
-
-        # ---Create Repo node instance ---
-        repo_node = spawn Repo(
-            repo_url = repo_url,
-            repo_name = repo_name,
-            status = "validated",
-            created_at = datetime.now()
-        );
-
-        # ---Return success message ---
+    # Create a new Repo node to store the URL
+    can store_url with `root entry {
+        new_repo = Repo(
+            repo_url=self.repo_url
+            );
+    
+    here ++> new_repo;
+    
         report {
             "status": "success",
-            "message": f"Repository URL validated successfully.",
-            "repo_name": repo_name,
-            "repo_url": repo_url
+            "message": "Repo URL stored in Repo node."
         };
     }
+
 }
 
 
