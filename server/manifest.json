@@ -1,0 +1,6 @@
+{
+  "name": "CodeBaseGenius Backend",
+  "description": "Agentic backend for analyzing GitHub repositories.",
+  "entry": "main.jac",
+  "version": "1.0.0"
+}
