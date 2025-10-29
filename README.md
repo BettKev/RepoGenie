@@ -3,17 +3,17 @@
 This is a mutliagent platform that receives a public github repository url and analyzes the codebasse generating a detailed documentation of the repository structure.
 
 There are four main agents that work together to achieve the goal:
-* *** Code Analyzer ***
-* *** Doc Genie ***
-* *** Repo Mapper ***
-* *** Supervisor ***
+* *Code Analyzer ***
+* *Doc Genie ***
+* *Repo Mapper ***
+* *Supervisor ***
 
 ## Environmental Variable
 Include the following inside directory "server":
 
 Create a .env file and add the following variable
 
-GEMINI_API_KEY = "your_public_api_key" 
+* GEMINI_API_KEY = "your_public_api_key" 
 
 You can get this key from https://aistudio.google.com/apikey
 
