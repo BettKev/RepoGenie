@@ -19,7 +19,7 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/validate_repo_url", {
+      const response = await fetch("https://repogenie.onrender.com/validate_repo_url", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
