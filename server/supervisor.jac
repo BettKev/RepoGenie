@@ -17,18 +17,43 @@ walker validate_repo_url {
 
     # Receive the url from frontend
     can receive_url with `root entry {
-        if self.repo_url != "" {
-            report {
-                "status": "good",
-                "message": "Repo URL received successfully.",
-                "repo_url": self.repo_url
-            };
-        } else {
+        if self.repo_url == "" or self.repo_url == None {
             report {
                 "status": "failed",
                 "message": "Missing or empty 'repo_url'."
             };
+            return;
         }
+
+        if not self.repo_url.startswith("https://github.com/") {
+            report {
+                "status": "failed",
+                "message": "Invalid 'repo_url'. Must start with 'https://github.com/'.",
+                "repo_url": self.repo_url
+            };
+            return;
+        }
+        
+        parts = self.repo_url.split("/");
+
+        # Ensure format is https://github.com/{owner}/{repo}
+        if len(parts) < 5 or parts[3] == "" or parts[4] == "" {
+            report {
+                "status": "failed",
+                "message": "Invalid repository URL. Must be in the format 'https://github.com/{owner}/{repo}'.",
+                "repo_url": self.repo_url
+            };
+            return;
+        }
+
+        # If all checks pass
+        report {
+            "status": "success",
+            "message": "Valid repository URL received.",
+            "repo_url": self.repo_url,
+            "owner": parts[3],
+            "repo": parts[4]
+        };
     }
 
     # Create a new Repo node to store the URL
