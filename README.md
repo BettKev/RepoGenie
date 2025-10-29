@@ -9,9 +9,13 @@ Repo Mapper
 Supervisor
 
 ## Environmental Variable
-Inside .env include the following directory "server":
+Include the following inside directory "server":
 
-GEMINI_API_KEY = ""
+Create a .env file and add the following variable
+
+GEMINI_API_KEY = "your_public_api_key" 
+
+You can get this key from https://aistudio.google.com/apikey
 
 ## Frontend Activation
 The front end is an SPA built with react vite.
