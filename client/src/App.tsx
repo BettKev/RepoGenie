@@ -7,7 +7,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!repoUrl.trim()) {
       toast.error("Please enter a valid GitHub repository URL.", {
@@ -18,11 +18,41 @@ function App() {
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      console.log("Repository submitted:", repoUrl);
+    try {
+      const response = await fetch("http://localhost:8000/validate_repo_url", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ repo_url: repoUrl }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.reports?.[0]) {
+        const report = data.reports[0];
+        if (report.status === "success") {
+          toast.success(report.message || "Repository validated successfully!", {
+            position: "top-right",
+          });
+        } else {
+          toast.error(report.message || "Repository validation failed.", {
+            position: "top-right",
+          });
+        }
+      } else {
+        toast.error("Unexpected response from server.", {
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      console.error("Error validating repository:", error);
+      toast.error("Failed to reach the backend. Is it running?", {
+        position: "top-right",
+      });
+    } finally {
       setIsLoading(false);
-      toast.success("Repository analysis started!", { position: "top-right" });
-    }, 2000);
+    }
   };
 
   return (
