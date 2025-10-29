@@ -15,7 +15,6 @@ walker validate_repo_url {
         static has path: str = "/validate_repo_url";
     }
     
-
     # Receive the url from frontend
     can receive_url with `root entry {
         if self.repo_url == "" or self.repo_url == None {
@@ -91,13 +90,19 @@ walker validate_repo_url {
 
         if result["exists"] and not result["private"] {
         # Store only if valid
-        new_repo = Repo(repo_url=self.repo_url);
+        new_repo = Repo(
+            repo_url=self.repo_url,
+            repo_name=repo,
+            status="initialized"
+        );
         here ++> new_repo;
 
         report {
-            "status": "success",
-            "message": "Repository validated and stored successfully.",
-            "repo_url": self.repo_url
+                "status": "success",
+                "message": f"Repository '{repo}' validated and initialized successfully.",
+                "repo_url": self.repo_url,
+                "repo_name": repo,
+                "status": "initialized"
         };
         } else {
             report {

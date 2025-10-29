@@ -223,7 +223,7 @@ function App() {
 
       <ToastContainer
         position="top-right"
-        autoClose={3000}
+        autoClose={1000}
         theme="dark"
         toastClassName="bg-gray-800 text-gray-100"
       />
